@@ -1,0 +1,57 @@
+<div>
+  <!-- 添加分类 -->
+  <el-button type="success" plain @click="openCategories">添加分类</el-button>
+  <!-- 添加分类窗口 -->
+  <el-dialog title="添加分类" :visible.sync="dialogCategoriesVisible">
+    <el-form :model="categoriresForm">
+      <el-form-item label="分类名称" label-width="80px">
+        <el-input v-model="categoriresForm.cat_name"></el-input>
+      </el-form-item>
+      <el-form-item label="父级名称" label-width="80px">
+        <el-cascader
+          :props="propsCategories"
+          :options="options"
+          v-model="categoriresForm.cat_pid_arr"
+          change-on-select
+        ></el-cascader>
+        <!-- <el-select v-model="categoriresForm.region" placeholder="请选择分类"> -->
+        <!-- <el-option label="区域一" value="shanghai"></el-option>
+        <el-option label="区域二" value="beijing"></el-option>-->
+        <!-- </el-select> -->
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="dialogCategoriesVisible = false">取 消</el-button>
+      <el-button type="primary" @click="closeCategoriesVisible"
+        >确 定</el-button
+      >
+    </div>
+  </el-dialog>
+  <!-- ---------------------------- -->
+  <el-table :data="CategoriesLists" style="width: 100%">
+    <el-table-tree-column
+      prop="cat_name"
+      label="分类名称"
+      width="220"
+      levelKey="cat_level"
+      tree-key="cat_id"
+      parentKey="cat_pid"
+      :indentSize="20"
+    ></el-table-tree-column>
+
+    <!-- <el-table-column prop="cat_name" label="分类名称" width="180"> -->
+    <!-- </el-table-column> -->
+    <el-table-column prop="cat_deleted" label="是否有效" width="180">
+      <template slot-scope="scope">
+        <span>{{ scope.row.cat_deleted ? '否' : '是' }}</span>
+      </template>
+    </el-table-column>
+    <el-table-column prop="cat_level" label="层级">
+      <template slot-scope="scope">
+        <span v-if="scope.row.cat_level == 0">一级</span>
+        <span v-else-if="scope.row.cat_level == 1">二级</span>
+        <span v-else>三级</span>
+      </template>
+    </el-table-column>
+  </el-table>
+</div>
